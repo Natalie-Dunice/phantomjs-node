@@ -1690,8 +1690,15 @@ require.define("/shim.coffee", function (require, module, exports, __dirname, __
       return cb(phantom.clearCookies());
     },
     createPage: function(cb) {
-      return cb(pageWrap(webpage.create()));
+        var z = webpage.create();
+        z.onConsoleMessage = function() {
+            var msg;
+            msg = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+            return console.log.apply(console, msg);
+        };
+        return cb(pageWrap(z));
     }
+
   });
 
   server = proto(_phantom);
